@@ -1,0 +1,7 @@
+{
+  "name": "BoardGamesScorer",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular"
+}
