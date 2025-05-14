@@ -1,0 +1,9 @@
+<ion-content class="ion-padding empty-state">
+  <ion-icon [name]="icon" class="empty-state__icon"></ion-icon>
+  <h2>{{ title }}</h2>
+  <p>{{ description }}</p>
+  <app-primary-button
+    label="Add Your First Player"
+    (clicked)="buttonClick.emit()">
+  </app-primary-button>
+</ion-content>

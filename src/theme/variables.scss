@@ -9,6 +9,11 @@
 
 :root {
   --ion-item-border-color: var(--ion-background-color-step-200);
+
+  --color-text: #303136;
+  --color-muted: #70757d;
+
+  --primary-blue: #7a8ef3;
 }
 
 :root.ios {
@@ -26,4 +31,7 @@
 .ion-palette-dark.ios,
 .ion-palette-dark.md {
   --ion-item-background: #1c1c1d;
+
+  --color-text: #fff;
+  --color-muted: #fff;
 }
