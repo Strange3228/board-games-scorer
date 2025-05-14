@@ -7,13 +7,15 @@ import { IonicModule } from '@ionic/angular';
 import { PlayersPageRoutingModule } from './players-routing.module';
 
 import { PlayersPage } from './players.page';
+import { EmptyStateComponent } from "../../shared/components/empty-state/empty-state.component";
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     IonicModule,
-    PlayersPageRoutingModule
+    PlayersPageRoutingModule,
+    EmptyStateComponent,
   ],
   declarations: [PlayersPage]
 })
