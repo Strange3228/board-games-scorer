@@ -7,7 +7,12 @@ const routes: Routes = [
   {
     path: '',
     component: PlayersPage
+  },
+  {
+    path: 'create',
+    loadChildren: () => import('./pages/player-create/player-create.module').then( m => m.PlayerCreatePageModule)
   }
+
 ];
 
 @NgModule({

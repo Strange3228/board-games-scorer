@@ -1,0 +1,89 @@
+
+:host::ng-deep {
+  .actions {
+    display: flex;
+    gap: 1rem;
+
+    app-primary-button {
+      flex: 1;
+
+      ion-button {
+        width: 100%;
+      }
+    }
+  }
+}
+
+.player-create {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  padding-top: 2rem;
+
+  .avatar {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+
+    .avatar-circle {
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+      background-color: var(--primary-blue);
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+      font-size: 2rem;
+    }
+  }
+
+  .player-create__name {
+    --background: transparent;
+
+    ion-label {
+      margin-bottom: 0.8rem;
+      font-weight: 600;
+      font-size: 1.2rem;
+      color: var(--color-muted);
+    }
+
+    ion-input {
+      --background: white;
+      --padding-start: 8px;
+      --padding-end: 8px;
+      --border-radius: 8px;
+    }
+  }
+
+  .color-picker {
+    display: flex;
+    flex-direction: column;
+
+    label {
+      font-weight: 600;
+      font-size: 14px;
+      color: var(--color-muted);
+    }
+
+    .colors {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 0.75rem;
+      margin-top: 1rem;
+    }
+
+    .color-box {
+      height: 40px;
+      border-radius: 8px;
+      border: 2px solid transparent;
+      cursor: pointer;
+
+      &.selected {
+        border-color: var(--ion-color-primary);
+      }
+    }
+  }
+}

@@ -1,3 +1,14 @@
-<ion-button class="primary-btn" expand="block" (click)="onClick()">
+<ion-button
+  class="primary-btn"
+  expand="block"
+  [ngClass]="{
+    'outline-btn': type === 'outline',
+    'size-sm': size === 'sm',
+    'size-md': size === 'md',
+    'size-lg': size === 'lg',
+  }"
+  [disabled]="disabled"
+  (click)="onClick()"
+>
   {{ label }}
 </ion-button>
