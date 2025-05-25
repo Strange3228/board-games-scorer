@@ -1,5 +1,8 @@
-import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { NavController } from "@ionic/angular";
+import { v4 as uuidv4 } from 'uuid';
 import { PLAYER_COLORS } from "./const/player-colors.cont";
+import { Player, PlayersStoreService } from "../../../../shared/store/players.store";
 
 @Component({
   selector: 'app-player-create',
@@ -8,12 +11,51 @@ import { PLAYER_COLORS } from "./const/player-colors.cont";
   standalone: false,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class PlayerCreatePage implements OnInit {
+export class PlayerCreatePage {
   public playerColors: {[key: string]: string} = PLAYER_COLORS;
 
-  constructor() { }
+  public playerName: string = '';
+  public selectedColor: string;
 
-  ngOnInit() {
+  constructor(
+    private navController: NavController,
+    private playersStore: PlayersStoreService,
+  ) { }
+
+  public get playerInitials(): string {
+    if (this.playerName.length === 0) return 'NP';
+
+    const parts = this.playerName.trim().split(' ').filter(Boolean);
+    const first = parts[0]?.[0] ?? '';
+    const second = parts[1]?.[0] ?? parts[0]?.[1] ?? '';
+
+    return (first + second).toUpperCase();
   }
 
+  public get isValid(): boolean {
+    return this.playerName.trim().length > 0 && !!this.selectedColor;
+  }
+
+  public onSelectColor(color: string): void {
+    this.selectedColor = color;
+  }
+
+  public onCancel(): void {
+    this.navController.back();
+  }
+
+  public onSave(): void {
+    if (!this.isValid) return;
+
+    const newPlayer: Player = {
+      id: uuidv4(),
+      name: this.playerName.trim(),
+      color: this.selectedColor,
+    };
+
+    this.playersStore.addPlayer(newPlayer)
+      .then(() => {
+        this.navController.back();
+      })
+  }
 }

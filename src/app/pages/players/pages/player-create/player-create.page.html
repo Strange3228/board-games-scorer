@@ -10,7 +10,7 @@
 <ion-content class="ion-padding">
   <div class="player-create">
     <div class="avatar">
-      <div class="avatar-circle">NP</div>
+      <div class="avatar-circle">{{ playerInitials }}</div>
       <app-primary-button
         type="outline"
         [label]="'Choose photo'"
@@ -23,7 +23,7 @@
       class="player-create__name ion-no-padding"
     >
       <ion-label position="stacked">Name</ion-label>
-      <ion-input placeholder="Enter player name"></ion-input>
+      <ion-input [(ngModel)]="playerName" placeholder="Enter player name"></ion-input>
     </ion-item>
 
     <div class="color-picker">
@@ -32,9 +32,9 @@
         @for (color of playerColors | keyvalue; track color.key) {
           <div
             class="color-box"
-            [ngStyle]="{
-              'background-color': color.value
-            }"
+            (click)="onSelectColor(color.value)"
+            [ngStyle]="{ 'background-color': color.value }"
+            [ngClass]="{ 'selected': color.value === selectedColor, }"
           ></div>
         }
       </div>
@@ -43,10 +43,12 @@
     <div class="actions">
       <app-primary-button
         type="outline"
+        (click)="onCancel()"
         [label]="'Cancel'"
       ></app-primary-button>
       <app-primary-button
-        [disabled]="true"
+        (click)="onSave()"
+        [disabled]="!isValid"
         [label]="'Save Player'"
       ></app-primary-button>
     </div>
