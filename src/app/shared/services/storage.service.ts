@@ -17,11 +17,17 @@ export class StorageService {
     this._storage = await this.storage?.create();
   }
 
-  public set(key: string, value: any) {
-    this._storage?.set(key, value);
+  public async set(key: string, value: any) {
+    if(!this._storage)
+      await this.init();
+
+    return await this._storage?.set(key, value);
   }
 
   public async get(key: string): Promise<any> {
-    return this._storage?.get(key);
+    if(!this._storage)
+      await this.init();
+
+    return await this._storage?.get(key);
   }
 }

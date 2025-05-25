@@ -13,7 +13,7 @@ export interface Player {
   avatar?: string;
 }
 
-export const PLAYERS_KEY = 'all_players';
+const PLAYERS_KEY = 'all_players';
 
 @Injectable({
   providedIn: 'root'
@@ -22,12 +22,11 @@ export class PlayersStoreService {
   constructor(private storageService: StorageService) {}
 
   async getPlayers(): Promise<Player[]> {
-    const players = await this.storageService.get(PLAYERS_KEY);
-    return players || [];
+    return await this.storageService.get(PLAYERS_KEY);
   }
 
   async addPlayer(newPlayer: Player): Promise<void> {
-    const players = await this.getPlayers();
+    const players = await this.getPlayers() ?? [];
     players.push(newPlayer);
     await this.storageService.set(PLAYERS_KEY, players);
   }

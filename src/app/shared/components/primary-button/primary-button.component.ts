@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from '@angular/core';
 import { IonicModule } from "@ionic/angular";
-import { NgClass, NgStyle } from "@angular/common";
+import { NgClass } from "@angular/common";
 
 @Component({
   selector: 'app-primary-button',
@@ -9,7 +9,6 @@ import { NgClass, NgStyle } from "@angular/common";
   standalone: true,
   imports: [
     IonicModule,
-    NgStyle,
     NgClass
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,

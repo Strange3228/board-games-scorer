@@ -6,6 +6,7 @@
 
 <ion-content [fullscreen]="true">
   <app-empty-state
+    *ngIf="!(players | async) || (players | async)?.length === 0"
     icon="person-add-outline"
     title="No Players yet"
     description="Add your first player to get started tracking game results."
