@@ -5,6 +5,11 @@ export interface Player {
   id: string;
   name: string;
   color: string;
+  playedGames: {
+    templateId: string;
+    isWin: boolean;
+    date: Date;
+  }[];
   avatar?: string;
 }
 

@@ -51,6 +51,7 @@ export class PlayerCreatePage {
       id: uuidv4(),
       name: this.playerName.trim(),
       color: this.selectedColor,
+      playedGames: [],
     };
 
     this.playersStore.addPlayer(newPlayer)
