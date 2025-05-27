@@ -8,6 +8,7 @@ import { PlayersPageRoutingModule } from './players-routing.module';
 
 import { PlayersPage } from './players.page';
 import { EmptyStateComponent } from "../../shared/components/empty-state/empty-state.component";
+import { PlayerInitialsPipe } from "../../shared/pipes/player-initials.pipe";
 
 @NgModule({
   imports: [
@@ -16,6 +17,7 @@ import { EmptyStateComponent } from "../../shared/components/empty-state/empty-s
     IonicModule,
     PlayersPageRoutingModule,
     EmptyStateComponent,
+    PlayerInitialsPipe,
   ],
   declarations: [PlayersPage]
 })

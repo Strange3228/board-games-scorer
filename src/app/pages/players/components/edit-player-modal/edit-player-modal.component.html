@@ -1,0 +1,49 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Edit Player</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="cancel()">Cancel</ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <div class="edit-player">
+    <div class="avatar">
+      <div class="avatar-circle" [ngStyle]="{'background-color': selectedColor}">
+        {{ playerName | playerInitials }}
+      </div>
+    </div>
+
+    <div class="name-input">
+      <ion-label>Name</ion-label>
+      <ion-input
+        [(ngModel)]="playerName"
+        placeholder="Enter player name"
+        class="custom-input"
+      ></ion-input>
+    </div>
+
+    <div class="color-picker">
+      <ion-label>Color</ion-label>
+      <div class="colors">
+        @for (color of playerColors | keyvalue; track color.key) {
+          <div
+            class="color-box"
+            (click)="onSelectColor(color.value)"
+            [ngStyle]="{ 'background-color': color.value }"
+            [ngClass]="{ 'selected': color.value === selectedColor }"
+          ></div>
+        }
+      </div>
+    </div>
+
+    <div class="actions">
+      <app-primary-button
+        [label]="'Save Changes'"
+        [disabled]="!isValid"
+        (click)="confirm()"
+      ></app-primary-button>
+    </div>
+  </div>
+</ion-content>

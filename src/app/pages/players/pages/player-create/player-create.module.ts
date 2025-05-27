@@ -8,15 +8,17 @@ import { PlayerCreatePageRoutingModule } from './player-create-routing.module';
 
 import { PlayerCreatePage } from './player-create.page';
 import { PrimaryButtonComponent } from "../../../../shared/components/primary-button/primary-button.component";
+import { PlayerInitialsPipe } from "../../../../shared/pipes/player-initials.pipe";
 
 @NgModule({
-    imports: [
-        CommonModule,
-        FormsModule,
-        IonicModule,
-        PlayerCreatePageRoutingModule,
-        PrimaryButtonComponent
-    ],
+  imports: [
+    CommonModule,
+    FormsModule,
+    IonicModule,
+    PlayerCreatePageRoutingModule,
+    PrimaryButtonComponent,
+    PlayerInitialsPipe,
+  ],
   declarations: [PlayerCreatePage]
 })
 export class PlayerCreatePageModule {}

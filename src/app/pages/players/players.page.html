@@ -12,7 +12,7 @@
       (ionInput)="filterPlayers()"
       class="custom-searchbar"
     ></ion-searchbar>
-    
+
     <ion-fab-button size="small" (click)="router.navigate(['players/create'])">
       <ion-icon name="add"></ion-icon>
     </ion-fab-button>
@@ -33,12 +33,15 @@
         <ion-card-content>
           <div class="player-header">
             <div class="player-avatar" [ngStyle]="{'background-color': player.color}">
-              {{ getPlayerInitials(player.name) }}
+              {{ player.name | playerInitials }}
             </div>
             <div class="player-info">
               <h2>{{ player.name }}</h2>
               <p class="games-played">{{ player.playedGames.length }} games played</p>
             </div>
+            <ion-button fill="clear" (click)="editPlayer(player)">
+              <ion-icon slot="icon-only" name="create-outline"></ion-icon>
+            </ion-button>
           </div>
 
           <div class="stats-container">

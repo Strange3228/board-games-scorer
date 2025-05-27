@@ -1,7 +1,8 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
 import { Router } from "@angular/router";
 import { Player, PlayersStoreService } from "../../shared/store/players.store";
-import { AlertController } from '@ionic/angular';
+import { AlertController, ModalController } from '@ionic/angular';
+import { EditPlayerModalComponent } from './components/edit-player-modal/edit-player-modal.component';
 
 @Component({
   selector: 'app-players',
@@ -20,21 +21,12 @@ export class PlayersPage {
     private playersStore: PlayersStoreService,
     private cdr: ChangeDetectorRef,
     private alertController: AlertController,
+    private modalController: ModalController,
   ) {}
 
   public ionViewWillEnter(): void {
     this.players = this.playersStore.getPlayers().then(players => players || []);
     this.cdr.detectChanges();
-  }
-
-  public getPlayerInitials(name: string): string {
-    if (name.length === 0) return 'NP';
-
-    const parts = name.trim().split(' ').filter(Boolean);
-    const first = parts[0]?.[0] ?? '';
-    const second = parts[1]?.[0] ?? parts[0]?.[1] ?? '';
-
-    return (first + second).toUpperCase();
   }
 
   public getWinCount(player: Player): number {
@@ -62,9 +54,25 @@ export class PlayersPage {
     this.cdr.detectChanges();
   }
 
-  public editPlayer(player: Player): void {
-    // TODO: Implement edit player functionality
-    console.log('Edit player:', player);
+  public async editPlayer(player: Player): Promise<void> {
+    const modal = await this.modalController.create({
+      component: EditPlayerModalComponent,
+      componentProps: {
+        player: { ...player },
+      },
+    });
+
+    await modal.present();
+
+    const { data } = await modal.onWillDismiss();
+    if (data) {
+      await this.playersStore.updatePlayer(data);
+      this.players = this.playersStore.getPlayers().then(players => players || []);
+      if (this.searchTerm) {
+        await this.filterPlayers();
+      }
+      this.cdr.detectChanges();
+    }
   }
 
   public async deletePlayer(player: Player): Promise<void> {

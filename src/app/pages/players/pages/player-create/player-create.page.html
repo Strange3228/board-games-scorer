@@ -10,7 +10,7 @@
 <ion-content class="ion-padding">
   <div class="player-create">
     <div class="avatar">
-      <div class="avatar-circle">{{ playerInitials }}</div>
+      <div class="avatar-circle">{{ playerName | playerInitials }}</div>
       <app-primary-button
         type="outline"
         [label]="'Choose photo'"

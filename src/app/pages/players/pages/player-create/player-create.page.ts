@@ -22,16 +22,6 @@ export class PlayerCreatePage {
     private playersStore: PlayersStoreService,
   ) { }
 
-  public get playerInitials(): string {
-    if (this.playerName.length === 0) return 'NP';
-
-    const parts = this.playerName.trim().split(' ').filter(Boolean);
-    const first = parts[0]?.[0] ?? '';
-    const second = parts[1]?.[0] ?? parts[0]?.[1] ?? '';
-
-    return (first + second).toUpperCase();
-  }
-
   public get isValid(): boolean {
     return this.playerName.trim().length > 0 && !!this.selectedColor;
   }
