@@ -4,13 +4,55 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
-  <app-empty-state
-    *ngIf="!(players | async) || (players | async)?.length === 0"
-    icon="person-add-outline"
-    title="No Players yet"
-    description="Add your first player to get started tracking game results."
-    buttonText="Add Player"
-    (buttonClick)="router.navigate(['players/create'])"
-  />
+<ion-content [fullscreen]="true" class="ion-padding">
+  <div class="search-container">
+    <ion-searchbar
+      placeholder="Search players..."
+      [(ngModel)]="searchTerm"
+      (ionInput)="filterPlayers()"
+      class="custom-searchbar"
+    ></ion-searchbar>
+    
+    <ion-fab-button size="small" (click)="router.navigate(['players/create'])">
+      <ion-icon name="add"></ion-icon>
+    </ion-fab-button>
+  </div>
+
+  <ng-container *ngIf="players | async as playersList">
+    <app-empty-state
+      *ngIf="!playersList?.length"
+      icon="person-add-outline"
+      title="No Players yet"
+      description="Add your first player to get started tracking game results."
+      buttonText="Add Player"
+      (buttonClick)="router.navigate(['players/create'])"
+    />
+
+    <div class="players-list" *ngIf="playersList?.length">
+      <ion-card *ngFor="let player of filteredPlayers || playersList" class="player-card">
+        <ion-card-content>
+          <div class="player-header">
+            <div class="player-avatar" [ngStyle]="{'background-color': player.color}">
+              {{ getPlayerInitials(player.name) }}
+            </div>
+            <div class="player-info">
+              <h2>{{ player.name }}</h2>
+              <p class="games-played">{{ player.playedGames.length }} games played</p>
+            </div>
+          </div>
+
+          <div class="stats-container">
+            <div class="stat-item">
+              <span class="stat-value">{{ getWinCount(player) }}</span>
+              <span class="stat-label">Wins</span>
+            </div>
+            <div class="stat-item">
+              <span class="stat-value">{{ getWinRate(player) }}%</span>
+              <span class="stat-label">Win Rate</span>
+            </div>
+          </div>
+        </ion-card-content>
+      </ion-card>
+    </div>
+  </ng-container>
 </ion-content>

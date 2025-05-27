@@ -1,6 +1,7 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
 import { Router } from "@angular/router";
 import { Player, PlayersStoreService } from "../../shared/store/players.store";
+import { AlertController } from '@ionic/angular';
 
 @Component({
   selector: 'app-players',
@@ -10,16 +11,83 @@ import { Player, PlayersStoreService } from "../../shared/store/players.store";
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PlayersPage {
-  players: Promise<Player[]>;
+  players: Promise<Player[]> = Promise.resolve([]);
+  filteredPlayers: Player[] | null = null;
+  searchTerm: string = '';
 
   constructor(
     public router: Router,
     private playersStore: PlayersStoreService,
     private cdr: ChangeDetectorRef,
+    private alertController: AlertController,
   ) {}
 
   public ionViewWillEnter(): void {
-    this.players = this.playersStore.getPlayers();
+    this.players = this.playersStore.getPlayers().then(players => players || []);
     this.cdr.detectChanges();
+  }
+
+  public getPlayerInitials(name: string): string {
+    if (name.length === 0) return 'NP';
+
+    const parts = name.trim().split(' ').filter(Boolean);
+    const first = parts[0]?.[0] ?? '';
+    const second = parts[1]?.[0] ?? parts[0]?.[1] ?? '';
+
+    return (first + second).toUpperCase();
+  }
+
+  public getWinCount(player: Player): number {
+    return player.playedGames.filter(game => game.isWin).length;
+  }
+
+  public getWinRate(player: Player): string {
+    if (player.playedGames.length === 0) return '0';
+    const winCount = this.getWinCount(player);
+    const winRate = (winCount / player.playedGames.length) * 100;
+    return winRate.toFixed(0);
+  }
+
+  public async filterPlayers(): Promise<void> {
+    if (!this.searchTerm.trim()) {
+      this.filteredPlayers = null;
+      this.cdr.detectChanges();
+      return;
+    }
+
+    const allPlayers = await this.players;
+    this.filteredPlayers = allPlayers.filter(player =>
+      player.name.toLowerCase().includes(this.searchTerm.toLowerCase())
+    );
+    this.cdr.detectChanges();
+  }
+
+  public editPlayer(player: Player): void {
+    // TODO: Implement edit player functionality
+    console.log('Edit player:', player);
+  }
+
+  public async deletePlayer(player: Player): Promise<void> {
+    const alert = await this.alertController.create({
+      header: 'Delete Player',
+      message: `Are you sure you want to delete ${player.name}?`,
+      buttons: [
+        {
+          text: 'Cancel',
+          role: 'cancel',
+        },
+        {
+          text: 'Delete',
+          role: 'destructive',
+          handler: async () => {
+            await this.playersStore.deletePlayer(player.id);
+            this.players = this.playersStore.getPlayers().then(players => players || []);
+            this.cdr.detectChanges();
+          },
+        },
+      ],
+    });
+
+    await alert.present();
   }
 }
