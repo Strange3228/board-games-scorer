@@ -1,0 +1,81 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/"></ion-back-button>
+    </ion-buttons>
+    <ion-title>New Template</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <div class="template-create">
+    <div class="name-input">
+      <ion-label>Game Name</ion-label>
+      <ion-input
+        [(ngModel)]="templateName"
+        placeholder="Enter game name"
+        class="custom-input"
+      ></ion-input>
+    </div>
+
+    <div class="win-type">
+      <ion-label>Win Type</ion-label>
+      <ion-segment [(ngModel)]="selectedWinType">
+        <ion-segment-button value="win_lose">
+          <ion-label>Win/Lose</ion-label>
+        </ion-segment-button>
+        <ion-segment-button value="points">
+          <ion-label>Points</ion-label>
+        </ion-segment-button>
+      </ion-segment>
+    </div>
+
+    <ng-container *ngIf="selectedWinType === 'points'">
+      <div class="points-section">
+        <div class="points-header">
+          <ion-label>Point Types</ion-label>
+          <ion-button fill="clear" (click)="addPointType()">
+            <ion-icon slot="icon-only" name="add"></ion-icon>
+          </ion-button>
+        </div>
+
+        <div class="points-list">
+          <div class="point-item" *ngFor="let point of pointTypes">
+            <ion-input
+              [value]="point.name"
+              (ionInput)="updatePointTypeName(point.id, $event.detail.value ?? '')"
+              placeholder="Enter point type name"
+              class="custom-input"
+            ></ion-input>
+            <ion-button fill="clear" color="danger" (click)="removePointType(point.id)">
+              <ion-icon slot="icon-only" name="trash-outline"></ion-icon>
+            </ion-button>
+          </div>
+        </div>
+      </div>
+    </ng-container>
+
+    <div class="description">
+      <ion-label>Description (Optional)</ion-label>
+      <ion-textarea
+        [(ngModel)]="description"
+        placeholder="Enter game description or notes"
+        [rows]="4"
+        class="custom-input"
+      ></ion-textarea>
+    </div>
+
+    <div class="actions">
+      <app-primary-button
+        type="outline"
+        (click)="onCancel()"
+        [label]="'Cancel'"
+      ></app-primary-button>
+      <app-primary-button
+        (click)="onSave()"
+        [disabled]="!isValid"
+        [label]="'Save Template'"
+      ></app-primary-button>
+    </div>
+  </div>
+</ion-content>

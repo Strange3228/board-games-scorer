@@ -1,16 +1,15 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-
-import { PlayersPage } from './players.page';
+import { TemplatesPage } from './templates.page';
 
 const routes: Routes = [
   {
     path: '',
-    component: PlayersPage
+    component: TemplatesPage,
   },
   {
     path: 'create',
-    loadChildren: () => import('./pages/player-create/player-create.module').then( m => m.PlayerCreatePageModule)
+    loadChildren: () => import('./pages/template-create/template-create.module').then(m => m.TemplateCreatePageModule)
   }
 ];
 
@@ -18,4 +17,4 @@ const routes: Routes = [
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule],
 })
-export class PlayersPageRoutingModule {}
+export class TemplatesPageRoutingModule {}
