@@ -75,7 +75,7 @@ export class TemplateCreatePage {
   }
 
   onCancel(): void {
-    this.router.navigate(['/templates']);
+    this.router.navigate(['/dashboard']);
   }
 
   private async showToast(message: string, color: 'success' | 'danger'): Promise<void> {

@@ -15,12 +15,19 @@ import { NgClass } from "@angular/common";
 })
 export class PrimaryButtonComponent {
   @Input() label: string = 'Click Me';
-  @Input() type: 'default' | 'outline';
-  @Input() size: 'sm' | 'md' | 'lg';
+  @Input() type: 'default' | 'outline' | 'text' = 'default';
+  @Input() size: 'sm' | 'md' | 'lg' = 'md';
+  @Input() color: 'primary' | 'success' | 'warning' | 'danger' | 'tertiary' = 'primary';
+  @Input() icon?: string;
+  @Input() iconPosition: 'start' | 'end' = 'start';
+  @Input() fullWidth: boolean = false;
   @Input() disabled: boolean = false;
+  @Input() loading: boolean = false;
   @Output() clicked: EventEmitter<void> = new EventEmitter<void>();
 
   onClick() {
-    this.clicked.emit();
+    if (!this.disabled && !this.loading) {
+      this.clicked.emit();
+    }
   }
 }
