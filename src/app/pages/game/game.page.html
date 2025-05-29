@@ -1,0 +1,126 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/"></ion-back-button>
+    </ion-buttons>
+    <ion-title>{{ selectedTemplate?.name || 'New Game' }}</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="onFinishGame()" [disabled]="!isValid">
+        Finish Game
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <div class="game-form">
+    <!-- Game Template Selection -->
+    <div class="form-group">
+      <ion-label>Select Game</ion-label>
+      <div class="template-select">
+        <ion-select
+          [(ngModel)]="selectedTemplate"
+          (ionChange)="onTemplateChange()"
+          placeholder="Select a game template"
+          interface="action-sheet"
+          [compareWith]="compareWithFn"
+        >
+          <ion-select-option [value]="template" *ngFor="let template of templates | async">
+            {{ template.name }}
+          </ion-select-option>
+        </ion-select>
+        <ion-button fill="clear" (click)="onCreateTemplate()">
+          <ion-icon slot="icon-only" name="add-outline"></ion-icon>
+        </ion-button>
+      </div>
+    </div>
+
+    <!-- Game Date -->
+    <div class="form-group">
+      <ion-label>Date and Time</ion-label>
+      <div class="datetime-container">
+        <ion-datetime-button datetime="game-date" class="datetime-button"></ion-datetime-button>
+        <ion-modal [keepContentsMounted]="true">
+          <ng-template>
+            <ion-datetime
+              id="game-date"
+              [(ngModel)]="gameDate"
+              [preferWheel]="true"
+              presentation="date-time"
+              [showDefaultButtons]="true"
+              [firstDayOfWeek]="1"
+              locale="en-US"
+              hourCycle="h23"
+              class="datetime-picker"
+            ></ion-datetime>
+          </ng-template>
+        </ion-modal>
+      </div>
+    </div>
+
+    <!-- Players Selection -->
+    <div class="form-group">
+      <div class="section-header">
+        <ion-label>Players</ion-label>
+        <ion-button fill="clear" (click)="onSelectPlayers()">
+          <ion-icon slot="icon-only" name="person-add-outline"></ion-icon>
+        </ion-button>
+      </div>
+
+      <div class="players-list" *ngIf="selectedPlayers.length">
+        <ion-card *ngFor="let player of selectedPlayers" class="player-card">
+          <ion-card-content>
+            <div class="player-header">
+              <div class="player-avatar" [ngStyle]="{'background-color': player.color}">
+                {{ player.name | playerInitials }}
+              </div>
+              <div class="player-name">{{ player.name }}</div>
+            </div>
+
+            <!-- Points-based scoring -->
+            <ng-container *ngIf="selectedTemplate?.winType === 'points'">
+              <div class="points-container">
+                <div class="point-type" *ngFor="let pointType of selectedTemplate?.pointTypes ?? []">
+                  <ion-label>{{ pointType.name }}</ion-label>
+                  <ion-input
+                    type="number"
+                    [value]="playerScores[player.id]?.points?.[pointType.id] ?? 0"
+                    (ionInput)="updatePoints(player.id, pointType.id, $any($event).detail.value)"
+                    class="points-input"
+                  ></ion-input>
+                </div>
+              </div>
+            </ng-container>
+
+            <!-- Win/Lose scoring -->
+            <ng-container *ngIf="selectedTemplate?.winType === 'win_lose'">
+              <ion-checkbox
+                [checked]="playerScores[player.id]?.isWinner"
+                (ionChange)="updateWinner(player.id, $any($event).detail.checked)"
+                labelPlacement="end"
+              >
+                Winner
+              </ion-checkbox>
+            </ng-container>
+          </ion-card-content>
+        </ion-card>
+      </div>
+
+      <div class="empty-players" *ngIf="!selectedPlayers.length">
+        <p>No players selected</p>
+        <ion-button (click)="onSelectPlayers()">Add Players</ion-button>
+      </div>
+    </div>
+
+    <!-- Game Notes -->
+    <div class="form-group">
+      <ion-label>Game Notes</ion-label>
+      <ion-textarea
+        [(ngModel)]="notes"
+        placeholder="Add any notes about the game..."
+        [rows]="4"
+        class="notes-input"
+      ></ion-textarea>
+    </div>
+  </div>
+</ion-content> 

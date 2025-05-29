@@ -11,16 +11,9 @@ import { ToastController } from '@ionic/angular';
 export class DashboardPage {
   constructor(
     public router: Router,
-    private toastController: ToastController,
   ) {}
 
   async onNewGame(): Promise<void> {
-    const toast = await this.toastController.create({
-      message: 'Game creation will be implemented soon!',
-      duration: 2000,
-      position: 'bottom',
-    });
-
-    await toast.present();
+    await this.router.navigate(['/game']);
   }
 }

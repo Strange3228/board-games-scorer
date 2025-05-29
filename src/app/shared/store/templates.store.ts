@@ -30,6 +30,11 @@ export class TemplatesStoreService {
     return await this.storageService.get(TEMPLATES_KEY);
   }
 
+  async getTemplateById(id: string): Promise<Template | undefined> {
+    const templates = await this.getTemplates();
+    return templates?.find(t => t.id === id);
+  }
+
   async addTemplate(newTemplate: Template): Promise<void> {
     const templates = await this.getTemplates() ?? [];
     templates.push(newTemplate);
