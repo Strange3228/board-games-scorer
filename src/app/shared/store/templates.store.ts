@@ -8,15 +8,17 @@ export interface PointType {
   name: string;
 }
 
-export interface GameTemplate {
+export interface Template {
   id: string;
   name: string;
+  description: string;
   winType: WinType;
   pointTypes: PointType[];
-  description?: string;
+  createdAt: Date;
+  updatedAt: Date;
 }
 
-const TEMPLATES_KEY = 'game_templates';
+const TEMPLATES_KEY = 'all_templates';
 
 @Injectable({
   providedIn: 'root'
@@ -24,17 +26,17 @@ const TEMPLATES_KEY = 'game_templates';
 export class TemplatesStoreService {
   constructor(private storageService: StorageService) {}
 
-  async getTemplates(): Promise<GameTemplate[]> {
-    return await this.storageService.get(TEMPLATES_KEY) || [];
+  async getTemplates(): Promise<Template[]> {
+    return await this.storageService.get(TEMPLATES_KEY);
   }
 
-  async addTemplate(newTemplate: GameTemplate): Promise<void> {
-    const templates = await this.getTemplates();
+  async addTemplate(newTemplate: Template): Promise<void> {
+    const templates = await this.getTemplates() ?? [];
     templates.push(newTemplate);
     await this.storageService.set(TEMPLATES_KEY, templates);
   }
 
-  async updateTemplate(updatedTemplate: GameTemplate): Promise<void> {
+  async updateTemplate(updatedTemplate: Template): Promise<void> {
     const templates = await this.getTemplates();
     const index = templates.findIndex(t => t.id === updatedTemplate.id);
     if (index !== -1) {
@@ -47,5 +49,9 @@ export class TemplatesStoreService {
     const templates = await this.getTemplates();
     const updated = templates.filter(t => t.id !== templateId);
     await this.storageService.set(TEMPLATES_KEY, updated);
+  }
+
+  async clearTemplates(): Promise<void> {
+    await this.storageService.set(TEMPLATES_KEY, []);
   }
 } 

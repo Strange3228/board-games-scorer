@@ -1,0 +1,54 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title>Templates</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true" class="ion-padding">
+  <div class="search-container">
+    <ion-searchbar
+      placeholder="Search templates..."
+      [(ngModel)]="searchTerm"
+      (ionInput)="filterTemplates()"
+      class="custom-searchbar"
+    ></ion-searchbar>
+  </div>
+
+  <ng-container *ngIf="templates | async as templatesList">
+    <app-empty-state
+      *ngIf="!templatesList?.length"
+      icon="document-outline"
+      title="No Templates yet"
+      description="Add your first template to get started tracking game results."
+      buttonText="Add Template"
+      (buttonClick)="router.navigate(['templates/create'])"
+    />
+
+    <div class="templates-list" *ngIf="templatesList?.length">
+      <ion-card *ngFor="let template of filteredTemplates || templatesList" class="template-card">
+        <ion-card-content>
+          <div class="template-header">
+            <div class="template-info">
+              <h2>{{ template.name }}</h2>
+              <p class="template-description">{{ template.description }}</p>
+            </div>
+            <ion-button fill="clear" (click)="deleteTemplate(template)">
+              <ion-icon slot="icon-only" name="trash-outline"></ion-icon>
+            </ion-button>
+          </div>
+
+          <div class="template-footer">
+            <div class="date-info">
+              <span class="date-label">Created:</span>
+              <span class="date-value">{{ template.createdAt | date:'short' }}</span>
+            </div>
+            <div class="date-info">
+              <span class="date-label">Updated:</span>
+              <span class="date-value">{{ template.updatedAt | date:'short' }}</span>
+            </div>
+          </div>
+        </ion-card-content>
+      </ion-card>
+    </div>
+  </ng-container>
+</ion-content> 

@@ -52,17 +52,20 @@ export class TemplateCreatePage {
     if (!this.isValid) return;
 
     try {
+      const now = new Date();
       const newTemplate = {
         id: crypto.randomUUID(),
         name: this.templateName.trim(),
-        description: this.description.trim() || undefined,
+        description: this.description.trim() || '',
         winType: this.selectedWinType,
         pointTypes: this.selectedWinType === 'points'
           ? this.pointTypes.map(pt => ({
               id: String(pt.id),
               name: pt.name.trim()
             }))
-          : []
+          : [],
+        createdAt: now,
+        updatedAt: now
       };
 
       await this.templatesStore.addTemplate(newTemplate);
