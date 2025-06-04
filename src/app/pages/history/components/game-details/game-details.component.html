@@ -54,22 +54,22 @@
 
         <div class="points-section" *ngIf="game.players[0]?.score?.points">
           <h3>Score Details</h3>
-          <ion-grid>
-            <ion-row class="header-row">
-              <ion-col size="3">Player</ion-col>
-              <ion-col *ngFor="let pointType of game.template.pointTypes">
-                {{ pointType.name }}
-              </ion-col>
-              <ion-col>Total</ion-col>
-            </ion-row>
-            <ion-row *ngFor="let player of game.players">
-              <ion-col size="3">{{ player.player.name }}</ion-col>
-              <ion-col *ngFor="let pointType of game.template.pointTypes">
-                {{ player.score?.points?.[pointType.id] || 0 }}
-              </ion-col>
-              <ion-col>{{ getTotalPoints(player.player.id) }}</ion-col>
-            </ion-row>
-          </ion-grid>
+          <div class="grid-container">
+            <div class="ag-theme-alpine">
+              <ag-grid-angular
+                [rowData]="rowData"
+                [columnDefs]="columnDefs"
+                [defaultColDef]="defaultColDef"
+                (gridReady)="onGridReady($event)"
+                [suppressMovableColumns]="true"
+                [suppressCellFocus]="true"
+                [enableRangeSelection]="false"
+                [suppressRowClickSelection]="true"
+                domLayout="autoHeight"
+              >
+              </ag-grid-angular>
+            </div>
+          </div>
         </div>
 
         <div class="notes-section" *ngIf="game.notes">
