@@ -6,7 +6,6 @@ import { Player } from './players.store';
 export interface PlayerScore {
   playerId: string;
   points?: { [pointTypeId: string]: number };
-  isWinner?: boolean;
 }
 
 export interface Game {
@@ -18,6 +17,10 @@ export interface Game {
     player: Player;
     score: PlayerScore;
   }[];
+  winner?: {
+    playerId: string;
+    totalPoints?: number;
+  };
   notes?: string;
   createdAt: Date;
   updatedAt: Date;
@@ -29,8 +32,8 @@ export interface GameInProgress {
   playerScores: {
     playerId: string;
     points?: { [pointTypeId: string]: number };
-    isWinner?: boolean;
   }[];
+  winner?: string;
   notes?: string;
 }
 

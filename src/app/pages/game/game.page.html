@@ -90,12 +90,15 @@
                   ></ion-input>
                 </div>
               </div>
+              <ion-note slot="end" *ngIf="playerScores[player.id]?.points">
+                Total: {{ calculateTotalPoints(playerScores[player.id]) }}
+              </ion-note>
             </ng-container>
 
             <!-- Win/Lose scoring -->
             <ng-container *ngIf="selectedTemplate?.winType === 'win_lose'">
               <ion-checkbox
-                [checked]="playerScores[player.id]?.isWinner"
+                [checked]="isPlayerWinner(player.id)"
                 (ionChange)="updateWinner(player.id, $any($event).detail.checked)"
                 labelPlacement="end"
               >

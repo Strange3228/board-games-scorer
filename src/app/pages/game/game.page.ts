@@ -20,6 +20,7 @@ export class GamePage implements OnInit {
   selectedPlayers: Player[] = [];
   playerScores: { [playerId: string]: PlayerScore } = {};
   notes: string = '';
+  currentWinner: string | undefined;
 
   constructor(
     private router: Router,
@@ -51,6 +52,7 @@ export class GamePage implements OnInit {
     this.selectedTemplate = await this.templatesStore.getTemplateById(game.templateId);
     this.gameDate = game.date.toISOString();
     this.notes = game.notes || '';
+    this.currentWinner = game.winner;
 
     const players = await this.playersStore.getPlayers();
     this.selectedPlayers = game.playerScores
@@ -60,8 +62,7 @@ export class GamePage implements OnInit {
     game.playerScores.forEach(ps => {
       this.playerScores[ps.playerId] = {
         playerId: ps.playerId,
-        points: ps.points,
-        isWinner: ps.isWinner,
+        points: ps.points
       };
     });
 
@@ -123,9 +124,49 @@ export class GamePage implements OnInit {
 
     this.playerScores[playerId] = {
       playerId,
-      points,
-      isWinner: this.selectedTemplate.winType === 'win_lose' ? false : undefined,
+      points
     };
+  }
+
+  calculateTotalPoints(score: PlayerScore): number {
+    return Object.values(score.points || {}).reduce((sum, val) => sum + val, 0);
+  }
+
+  isPlayerWinner(playerId: string): boolean {
+    return this.currentWinner === playerId;
+  }
+
+  updateWinner(playerId: string, isWinner: boolean) {
+    if (isWinner) {
+      this.currentWinner = playerId;
+    } else if (this.currentWinner === playerId) {
+      this.currentWinner = undefined;
+    }
+    this.cdr.detectChanges();
+    this.saveGameProgress();
+  }
+
+  private determineWinner(): { playerId: string; totalPoints?: number } | undefined {
+    if (!this.selectedTemplate) return undefined;
+
+    if (this.selectedTemplate.winType === 'points') {
+      let maxPoints = -1;
+      let winnerId: string | undefined;
+
+      Object.entries(this.playerScores).forEach(([playerId, score]) => {
+        const totalPoints = this.calculateTotalPoints(score);
+        if (totalPoints > maxPoints) {
+          maxPoints = totalPoints;
+          winnerId = playerId;
+        }
+      });
+
+      return winnerId ? { playerId: winnerId, totalPoints: maxPoints } : undefined;
+    } else if (this.selectedTemplate.winType === 'win_lose') {
+      return this.currentWinner ? { playerId: this.currentWinner } : undefined;
+    }
+
+    return undefined;
   }
 
   async onCreateTemplate() {
@@ -149,20 +190,17 @@ export class GamePage implements OnInit {
     this.cdr.detectChanges();
   }
 
-  updateWinner(playerId: string, isWinner: boolean) {
-    if (this.selectedTemplate?.winType === 'win_lose') {
-      this.playerScores[playerId].isWinner = isWinner;
-      this.saveGameProgress();
-    }
-  }
-
   private async saveGameProgress() {
     if (!this.selectedTemplate) return;
 
     const gameInProgress: GameInProgress = {
       templateId: this.selectedTemplate.id,
       date: new Date(this.gameDate),
-      playerScores: Object.values(this.playerScores),
+      playerScores: Object.entries(this.playerScores).map(([playerId, score]) => ({
+        playerId,
+        points: score.points
+      })),
+      winner: this.currentWinner,
       notes: this.notes,
     };
 
@@ -184,19 +222,14 @@ export class GamePage implements OnInit {
           const value = score.points![pt.id];
           return typeof value === 'number' && !isNaN(value);
         });
-      } else {
-        return typeof score.isWinner === 'boolean';
       }
+
+      return true;
     });
 
     if (!allPlayersHaveScores) return false;
 
-    if (this.selectedTemplate.winType === 'win_lose') {
-      const hasWinner = Object.values(this.playerScores).some(score => score.isWinner);
-      if (!hasWinner) return false;
-    }
-
-    return true;
+    return !(this.selectedTemplate.winType === 'win_lose' && !this.currentWinner);
   }
 
   async onFinishGame() {
@@ -226,6 +259,8 @@ export class GamePage implements OnInit {
 
     try {
       const now = new Date();
+      const winner = this.determineWinner();
+
       const game: Game = {
         id: crypto.randomUUID(),
         templateId: this.selectedTemplate.id,
@@ -235,6 +270,7 @@ export class GamePage implements OnInit {
           player,
           score: this.playerScores[player.id],
         })),
+        winner,
         notes: this.notes,
         createdAt: now,
         updatedAt: now,
@@ -242,21 +278,9 @@ export class GamePage implements OnInit {
 
       await this.gamesStore.addGame(game);
 
+      // Update player statistics
       for (const player of this.selectedPlayers) {
-        const score = this.playerScores[player.id];
-        let isWin = false;
-
-        if (this.selectedTemplate.winType === 'points') {
-          const playerTotal = Object.values(score.points || {}).reduce((sum, val) => sum + val, 0);
-          const highestTotal = Math.max(
-            ...Object.values(this.playerScores).map(s =>
-              Object.values(s.points || {}).reduce((sum, val) => sum + val, 0)
-            )
-          );
-          isWin = playerTotal === highestTotal;
-        } else {
-          isWin = score.isWinner === true;
-        }
+        const isWin = winner?.playerId === player.id;
 
         await this.playersStore.addGameToPlayer(player.id, {
           templateId: this.selectedTemplate.id,

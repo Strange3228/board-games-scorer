@@ -1,0 +1,147 @@
+:host {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+ion-content {
+  --background: var(--ion-background-color);
+}
+
+.filters-container {
+  background: var(--ion-color-light);
+  padding: 8px 16px;
+  margin-bottom: 8px;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+  position: sticky;
+  top: 0;
+  z-index: 10;
+
+  ion-item {
+    --background: transparent;
+    --padding-start: 0;
+    --inner-padding-end: 0;
+
+    ion-label {
+      margin-bottom: 4px;
+      color: var(--ion-color-medium);
+    }
+
+    ion-select,
+    ion-input {
+      --padding-start: 0;
+      font-size: 16px;
+      color: var(--ion-color-dark);
+    }
+  }
+
+  ion-button {
+    margin: 0;
+    --padding-start: 8px;
+    --padding-end: 8px;
+    height: 36px;
+    
+    &[disabled] {
+      opacity: 0.3;
+    }
+  }
+}
+
+.games-list {
+  background: transparent;
+  padding: 0;
+  margin-bottom: 16px;
+
+  ion-item {
+    --background: var(--ion-color-light);
+    --padding-start: 16px;
+    --padding-end: 16px;
+    --padding-top: 12px;
+    --padding-bottom: 12px;
+    margin: 8px 16px;
+    border-radius: 8px;
+
+    &:hover {
+      --background: var(--ion-background-color-step-100);
+    }
+  }
+
+  ion-avatar {
+    width: 48px;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--ion-color-primary-tint);
+
+    ion-icon {
+      font-size: 24px;
+      color: var(--ion-color-primary);
+
+      &.winner-icon {
+        color: var(--ion-color-warning);
+      }
+    }
+  }
+
+  h2 {
+    font-weight: 600;
+    font-size: 16px;
+    margin-bottom: 4px;
+    color: var(--ion-color-dark);
+  }
+
+  p {
+    color: var(--ion-color-medium);
+    font-size: 14px;
+    margin: 2px 0;
+
+    &.date {
+      font-size: 12px;
+    }
+  }
+
+  ion-badge {
+    font-weight: 500;
+    padding: 6px 8px;
+    border-radius: 6px;
+    background: var(--ion-color-light-shade);
+    color: var(--ion-color-medium);
+
+    &.has-winner {
+      background: var(--ion-color-light-shade);
+      color: var(--ion-color-dark);
+    }
+  }
+}
+
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 48px 16px;
+  text-align: center;
+  margin: 16px;
+  background: var(--ion-color-light);
+  border-radius: 8px;
+
+  .empty-icon {
+    font-size: 64px;
+    color: var(--ion-color-medium);
+    margin-bottom: 16px;
+  }
+
+  h3 {
+    font-size: 20px;
+    font-weight: 600;
+    margin: 0 0 8px;
+    color: var(--ion-color-dark);
+  }
+
+  p {
+    font-size: 14px;
+    color: var(--ion-color-medium);
+    margin: 0;
+  }
+} 

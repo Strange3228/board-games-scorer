@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 
 @Component({
   selector: 'app-history',
@@ -6,11 +6,6 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./history.page.scss'],
   standalone: false,
 })
-export class HistoryPage implements OnInit {
-
-  constructor() { }
-
-  ngOnInit() {
-  }
-
+export class HistoryPage {
+  constructor() {}
 }

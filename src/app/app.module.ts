@@ -8,6 +8,7 @@ import { IonicModule, IonicRouteStrategy } from '@ionic/angular';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { IonicStorageModule } from "@ionic/storage-angular";
+import { ColorService } from './shared/services/color.service';
 
 @NgModule({
   declarations: [AppComponent],
@@ -24,7 +25,7 @@ import { IonicStorageModule } from "@ionic/storage-angular";
       registrationStrategy: 'registerWhenStable:30000'
     },
   )],
-  providers: [{ provide: RouteReuseStrategy, useClass: IonicRouteStrategy }],
+  providers: [{ provide: RouteReuseStrategy, useClass: IonicRouteStrategy }, ColorService],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

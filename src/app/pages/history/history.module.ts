@@ -7,6 +7,8 @@ import { IonicModule } from '@ionic/angular';
 import { HistoryPageRoutingModule } from './history-routing.module';
 
 import { HistoryPage } from './history.page';
+import { HistoryComponent } from './components/history/history.component';
+import { GameDetailsComponent } from './components/game-details/game-details.component';
 
 @NgModule({
   imports: [
@@ -15,6 +17,10 @@ import { HistoryPage } from './history.page';
     IonicModule,
     HistoryPageRoutingModule,
   ],
-  declarations: [HistoryPage]
+  declarations: [
+    HistoryPage,
+    HistoryComponent,
+    GameDetailsComponent
+  ]
 })
 export class HistoryPageModule {}

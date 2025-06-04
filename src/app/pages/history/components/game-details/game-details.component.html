@@ -1,0 +1,87 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/tabs/history">
+      </ion-back-button>
+    </ion-buttons>
+    <ion-title>Game Details</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true" [scrollY]="true">
+  <div *ngIf="loading" class="loading-container">
+    <ion-spinner></ion-spinner>
+  </div>
+
+  <div *ngIf="!loading && !game" class="error-container">
+    <ion-icon name="alert-circle-outline"></ion-icon>
+    <h2>Game Not Found</h2>
+    <ion-button fill="clear" (click)="goBack()">Go Back</ion-button>
+  </div>
+
+  <div *ngIf="!loading && game" class="game-details">
+    <ion-card>
+      <ion-card-header>
+        <ion-card-subtitle>{{ formatDate(game.date) }}</ion-card-subtitle>
+        <ion-card-title>{{ game.template.name }}</ion-card-title>
+      </ion-card-header>
+
+      <ion-card-content>
+        <div class="winner-section" *ngIf="hasWinner()">
+          <ion-icon name="trophy" color="warning"></ion-icon>
+          <span>Winner: {{ getWinnerName() }}</span>
+          <span *ngIf="game?.winner?.totalPoints !== undefined" class="total-points">
+            ({{ game?.winner?.totalPoints }} points)
+          </span>
+        </div>
+
+        <div class="players-section">
+          <h3>Players</h3>
+          <ion-list>
+            <ion-item *ngFor="let player of game?.players" lines="none" class="player-item">
+              <ion-avatar slot="start" [style.backgroundColor]="player.player.color">
+                <img *ngIf="player.player.avatar" [src]="player.player.avatar" />
+                <ion-icon *ngIf="!player.player.avatar" name="person"></ion-icon>
+              </ion-avatar>
+              <ion-label>
+                <h2>{{ player.player.name }}</h2>
+                <p>Total Points: {{ getTotalPoints(player.player.id) }}</p>
+              </ion-label>
+              <ion-badge slot="end" color="light-success" *ngIf="game?.winner?.playerId === player.player.id">Winner</ion-badge>
+            </ion-item>
+          </ion-list>
+        </div>
+
+        <div class="points-section" *ngIf="game.players[0]?.score?.points">
+          <h3>Score Details</h3>
+          <ion-grid>
+            <ion-row class="header-row">
+              <ion-col size="3">Player</ion-col>
+              <ion-col *ngFor="let pointType of game.template.pointTypes">
+                {{ pointType.name }}
+              </ion-col>
+              <ion-col>Total</ion-col>
+            </ion-row>
+            <ion-row *ngFor="let player of game.players">
+              <ion-col size="3">{{ player.player.name }}</ion-col>
+              <ion-col *ngFor="let pointType of game.template.pointTypes">
+                {{ player.score?.points?.[pointType.id] || 0 }}
+              </ion-col>
+              <ion-col>{{ getTotalPoints(player.player.id) }}</ion-col>
+            </ion-row>
+          </ion-grid>
+        </div>
+
+        <div class="notes-section" *ngIf="game.notes">
+          <h3>Notes</h3>
+          <p>{{ game.notes }}</p>
+        </div>
+
+        <div class="metadata-section">
+          <p class="metadata">Created: {{ formatDate(game.createdAt) }}</p>
+          <p class="metadata">Last Updated: {{ formatDate(game.updatedAt) }}</p>
+        </div>
+      </ion-card-content>
+    </ion-card>
+  </div>
+</ion-content>
