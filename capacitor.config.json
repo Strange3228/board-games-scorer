@@ -1,6 +1,6 @@
 {
-  "appId": "io.ionic.boardgamesscorer",
-  "appName": "Board Games Scorer",
+  "appId": "com.tabletopper.app",
+  "appName": "TableTopper",
   "webDir": "www",
   "bundledWebRuntime": false
-} 
+}

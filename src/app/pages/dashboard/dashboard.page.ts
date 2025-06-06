@@ -52,7 +52,7 @@ export class DashboardPage {
 
   private async loadMostActivePlayers() {
     const players = await this.playersStore.getPlayers();
-
+    
     const playerStats = players.map(player => ({
       player,
       gamesPlayed: player.playedGames?.length || 0,
@@ -65,6 +65,6 @@ export class DashboardPage {
   }
 
   onNewGame() {
-    this.router.navigate(['/templates']);
+    this.router.navigate(['/game']);
   }
 }

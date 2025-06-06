@@ -1,0 +1,6 @@
+{
+  "assets": {
+    "source": "assets",
+    "output": "resources"
+  }
+} 
