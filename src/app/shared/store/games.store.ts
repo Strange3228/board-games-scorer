@@ -109,4 +109,12 @@ export class GamesStoreService {
       .sort((a, b) => b.playCount - a.playCount)
       .slice(0, limit);
   }
+
+  async getLastPlayedGames(limit: number = 3): Promise<Game[]> {
+    const games = await this.getGames();
+
+    return games
+      .sort((a, b) => b.date.getTime() - a.date.getTime())
+      .slice(0, limit);
+  }
 }

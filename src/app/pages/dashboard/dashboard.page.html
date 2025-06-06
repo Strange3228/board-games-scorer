@@ -5,6 +5,11 @@
 </ion-header>
 
 <ion-content [fullscreen]="true" class="ion-padding">
+  <div class="section-header">
+    <h2>Quick Start</h2>
+    <p>Start a new game or add players</p>
+  </div>
+
   <div class="actions-grid">
     <div class="action-item" (click)="onNewGame()">
       <div class="action-circle">
@@ -28,6 +33,34 @@
     </div>
   </div>
 
+  <div class="last-played-section" *ngIf="lastPlayedGames.length > 0">
+    <div class="section-header">
+      <h2>Last Played Games</h2>
+      <ion-button fill="clear" size="small" (click)="router.navigate(['/history'])">
+        See all
+        <ion-icon name="chevron-forward-outline" slot="end"></ion-icon>
+      </ion-button>
+    </div>
+
+    <div class="games-grid">
+      <div class="game-card" *ngFor="let game of lastPlayedGames" (click)="router.navigate(['/history', 'game', game.id])">
+        <div class="game-icon">
+          <ion-icon name="trophy-outline"></ion-icon>
+        </div>
+        <div class="game-info">
+          <h3>{{ game.template?.name }}</h3>
+          <p class="game-meta">
+            <span class="winner" *ngIf="game.winnerPlayer">
+              <ion-icon name="trophy-outline"></ion-icon>
+              {{ game.winnerPlayer.name }}
+            </span>
+            <span class="date">{{ game.date | date:'MMM d' }}</span>
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <div class="most-played-section" *ngIf="mostPlayedTemplates.length > 0">
     <div class="section-header">
       <h2>Most Popular Games</h2>
@@ -45,6 +78,37 @@
         <div class="template-info">
           <h3>{{ item.template.name }}</h3>
           <p class="play-count">{{ item.playCount }} {{ item.playCount === 1 ? 'play' : 'plays' }}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="players-section" *ngIf="mostActivePlayers.length > 0">
+    <div class="section-header">
+      <h2>Most Active Players</h2>
+      <ion-button fill="clear" size="small" (click)="router.navigate(['/players'])">
+        See all
+        <ion-icon name="chevron-forward-outline" slot="end"></ion-icon>
+      </ion-button>
+    </div>
+
+    <div class="players-grid">
+      <div class="player-card" *ngFor="let item of mostActivePlayers">
+        <div class="player-icon">
+          <ion-icon name="person-outline"></ion-icon>
+        </div>
+        <div class="player-info">
+          <h3>{{ item.player.name }}</h3>
+          <p class="player-stats">
+            <span class="games">
+              <ion-icon name="game-controller-outline"></ion-icon>
+              {{ item.gamesPlayed }}
+            </span>
+            <span class="wins">
+              <ion-icon name="trophy-outline"></ion-icon>
+              {{ item.wins }}
+            </span>
+          </p>
         </div>
       </div>
     </div>

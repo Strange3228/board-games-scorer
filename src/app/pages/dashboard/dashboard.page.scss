@@ -5,23 +5,41 @@
   color: var(--ion-color-dark);
 }
 
+.section-header {
+  max-width: 800px;
+  margin: 0 auto 1rem;
+  padding: 0 1rem;
+
+  h2 {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--ion-color-dark);
+    margin: 0 0 0.25rem;
+  }
+
+  p {
+    font-size: 0.875rem;
+    color: var(--ion-color-medium);
+    margin: 0;
+  }
+}
+
 .actions-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 1.5rem;
-  padding: 1.5rem;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+  padding: 0 1rem;
   max-width: 800px;
   margin: 0 auto;
 
   .action-item {
     display: flex;
-    flex-direction: column;
     align-items: center;
     gap: 1rem;
     cursor: pointer;
     transition: transform 0.2s ease;
-    padding: 1.5rem;
-    border-radius: 24px;
+    padding: 1rem;
+    border-radius: 16px;
     background: var(--ion-color-light);
     position: relative;
     overflow: hidden;
@@ -35,7 +53,7 @@
     }
 
     &:hover {
-      transform: translateY(-4px);
+      transform: translateY(-2px);
 
       &::after {
         background-color: rgba(var(--ion-color-primary-rgb), 0.05);
@@ -51,27 +69,18 @@
     }
 
     .action-circle {
-      width: 80px;
-      height: 80px;
-      border-radius: 50%;
+      width: 48px;
+      height: 48px;
+      border-radius: 12px;
       display: flex;
       align-items: center;
       justify-content: center;
       transition: all 0.2s ease;
       position: relative;
-
-      &::before {
-        content: '';
-        position: absolute;
-        inset: -8px;
-        border-radius: 50%;
-        background: inherit;
-        opacity: 0.2;
-        transition: opacity 0.2s ease;
-      }
+      flex-shrink: 0;
 
       ion-icon {
-        font-size: 2rem;
+        font-size: 1.5rem;
         color: white;
       }
     }
@@ -90,16 +99,16 @@
 
     .action-label {
       font-size: 1rem;
-      font-weight: 600;
+      font-weight: 500;
       color: var(--ion-color-dark);
-      text-align: center;
-      margin: 0;
     }
   }
 }
 
-.most-played-section {
-  padding: 0 1.5rem;
+.last-played-section,
+.most-played-section,
+.players-section {
+  padding: 0 1rem;
   max-width: 800px;
   margin: 2rem auto 0;
 
@@ -108,6 +117,7 @@
     justify-content: space-between;
     align-items: center;
     margin-bottom: 1rem;
+    padding: 0;
 
     h2 {
       font-size: 1.25rem;
@@ -127,116 +137,175 @@
       }
     }
   }
+}
 
-  .templates-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
+.games-grid,
+.templates-grid,
+.players-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+
+  .game-card,
+  .template-card,
+  .player-card {
+    background: var(--ion-color-light);
+    border-radius: 16px;
+    padding: 1rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
     gap: 1rem;
 
-    .template-card {
-      background: var(--ion-color-light);
-      border-radius: 16px;
-      padding: 1rem;
-      cursor: pointer;
-      transition: all 0.2s ease;
+    &:hover {
+      transform: translateY(-2px);
+      background: var(--ion-color-light-shade);
+
+      .game-icon,
+      .template-icon,
+      .player-icon {
+        transform: scale(1.05);
+      }
+    }
+
+    &:active {
+      transform: translateY(0) scale(0.98);
+    }
+
+    .game-icon,
+    .template-icon,
+    .player-icon {
+      width: 48px;
+      height: 48px;
+      border-radius: 12px;
       display: flex;
       align-items: center;
-      gap: 1rem;
+      justify-content: center;
+      transition: transform 0.2s ease;
+      flex-shrink: 0;
 
-      &:hover {
-        transform: translateY(-2px);
-        background: var(--ion-color-light-shade);
+      ion-icon {
+        font-size: 1.5rem;
+        color: white;
+      }
+    }
+  }
 
-        .template-icon {
-          transform: scale(1.05);
-        }
+  .game-card .game-icon {
+    background: linear-gradient(135deg, var(--ion-color-warning) 0%, var(--ion-color-warning-shade) 100%);
+  }
+
+  .template-card .template-icon {
+    background: linear-gradient(135deg, var(--ion-color-primary) 0%, var(--ion-color-primary-shade) 100%);
+  }
+
+  .player-card .player-icon {
+    background: linear-gradient(135deg, var(--ion-color-success) 0%, var(--ion-color-success-shade) 100%);
+  }
+
+  .game-info,
+  .template-info,
+  .player-info {
+    flex: 1;
+    min-width: 0;
+
+    h3 {
+      margin: 0;
+      font-size: 1rem;
+      font-weight: 500;
+      color: var(--ion-color-dark);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .game-meta,
+    .play-count,
+    .player-stats {
+      margin: 0.25rem 0 0;
+      font-size: 0.875rem;
+      color: var(--ion-color-medium);
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+
+      ion-icon {
+        font-size: 1rem;
+        margin-right: 0.25rem;
       }
 
-      &:active {
-        transform: translateY(0) scale(0.98);
-      }
-
-      .template-icon {
-        width: 48px;
-        height: 48px;
-        border-radius: 12px;
-        background: linear-gradient(135deg, var(--ion-color-primary) 0%, var(--ion-color-primary-shade) 100%);
+      .winner {
+        color: var(--ion-color-warning);
         display: flex;
         align-items: center;
-        justify-content: center;
-        transition: transform 0.2s ease;
-
-        ion-icon {
-          font-size: 1.5rem;
-          color: white;
-        }
       }
 
-      .template-info {
-        flex: 1;
-        min-width: 0;
+      .games {
+        color: var(--ion-color-success);
+        display: flex;
+        align-items: center;
+      }
 
-        h3 {
-          margin: 0;
-          font-size: 1rem;
-          font-weight: 500;
-          color: var(--ion-color-dark);
-          white-space: nowrap;
-          overflow: hidden;
-          text-overflow: ellipsis;
-        }
-
-        .play-count {
-          margin: 0.25rem 0 0;
-          font-size: 0.875rem;
-          color: var(--ion-color-medium);
-        }
+      .wins {
+        color: var(--ion-color-warning);
+        display: flex;
+        align-items: center;
       }
     }
   }
 }
 
 @media (max-width: 768px) {
+  .section-header {
+    padding: 0 1rem;
+  }
+
   .actions-grid {
-    padding: 1rem;
-    gap: 1rem;
+    padding: 0 1rem;
+    gap: 0.75rem;
 
     .action-item {
-      padding: 1rem;
+      padding: 0.875rem;
 
       .action-circle {
-        width: 60px;
-        height: 60px;
+        width: 40px;
+        height: 40px;
 
         ion-icon {
-          font-size: 1.5rem;
+          font-size: 1.25rem;
         }
       }
 
       .action-label {
-        font-size: 0.875rem;
+        font-size: 0.9375rem;
       }
     }
   }
 
-  .most-played-section {
-    padding: 0 1rem;
-    margin-top: 1.5rem;
+  .games-grid,
+  .templates-grid,
+  .players-grid {
+    grid-template-columns: 1fr;
 
-    .templates-grid {
-      grid-template-columns: 1fr;
+    .game-card,
+    .template-card,
+    .player-card {
+      .game-icon,
+      .template-icon,
+      .player-icon {
+        width: 40px;
+        height: 40px;
 
-      .template-card {
-        .template-icon {
-          width: 40px;
-          height: 40px;
-
-          ion-icon {
-            font-size: 1.25rem;
-          }
+        ion-icon {
+          font-size: 1.25rem;
         }
+      }
 
-        .template-info h3 {
+      .game-info,
+      .template-info,
+      .player-info {
+        h3 {
           font-size: 0.9375rem;
         }
       }
@@ -246,20 +315,11 @@
 
 @media (max-width: 480px) {
   .actions-grid {
-    grid-template-columns: 1fr;
-    gap: 1rem;
-  }
+    flex-direction: column;
+    gap: 0.5rem;
 
-  .action-item {
-    padding: 1.25rem !important;
-
-    .action-circle {
-      width: 64px !important;
-      height: 64px !important;
-
-      ion-icon {
-        font-size: 1.5rem !important;
-      }
+    .action-item {
+      max-width: none;
     }
   }
 }
