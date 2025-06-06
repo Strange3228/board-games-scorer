@@ -1,0 +1,6 @@
+{
+  "appId": "io.ionic.boardgamesscorer",
+  "appName": "Board Games Scorer",
+  "webDir": "www",
+  "bundledWebRuntime": false
+} 
