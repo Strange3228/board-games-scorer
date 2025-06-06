@@ -4,7 +4,6 @@ import { FormsModule } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
 import { HistoryPageRoutingModule } from './history-routing.module';
 import { HistoryPage } from './history.page';
-import { HistoryComponent } from './components/history/history.component';
 import { GameDetailsComponent } from './components/game-details/game-details.component';
 import { AgGridModule } from 'ag-grid-angular';
 import { ModuleRegistry, AllCommunityModule } from 'ag-grid-community';
@@ -22,7 +21,6 @@ ModuleRegistry.registerModules([AllCommunityModule]);
   ],
   declarations: [
     HistoryPage,
-    HistoryComponent,
     GameDetailsComponent
   ]
 })

@@ -4,12 +4,58 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">History</ion-title>
-    </ion-toolbar>
-  </ion-header>
+<ion-content [fullscreen]="true" [scrollY]="true">
+  <div class="filters-container">
+    <ion-grid class="ion-no-padding">
+      <ion-row class="ion-align-items-end">
+        <ion-col size="12" size-md="5">
+          <ion-item lines="none">
+            <ion-label position="stacked">Game Template</ion-label>
+            <ion-select [(ngModel)]="selectedTemplate" (ionChange)="applyFilters()" interface="popover">
+              <ion-select-option value="">All Templates</ion-select-option>
+              <ion-select-option *ngFor="let template of templates" [value]="template.id">
+                {{ template.name }}
+              </ion-select-option>
+            </ion-select>
+          </ion-item>
+        </ion-col>
+        <ion-col size="10" size-md="5">
+          <ion-item lines="none">
+            <ion-label position="stacked">Date</ion-label>
+            <ion-input type="date" [(ngModel)]="selectedDate" (ionChange)="applyFilters()"></ion-input>
+          </ion-item>
+        </ion-col>
+        <ion-col size="2" size-md="2" class="ion-text-end">
+          <ion-button fill="clear" size="small" (click)="clearFilters()" [disabled]="!selectedTemplate && !selectedDate">
+            <ion-icon name="close-circle-outline" slot="icon-only"></ion-icon>
+          </ion-button>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </div>
 
-  <ion-router-outlet></ion-router-outlet>
+  <ion-list class="games-list">
+    <ion-item-sliding *ngFor="let game of filteredGames">
+      <ion-item button detail="true" (click)="viewGameDetails(game.id)" lines="none">
+        <ion-avatar slot="start">
+          <ion-icon name="trophy" *ngIf="hasWinner(game)" class="winner-icon"></ion-icon>
+          <ion-icon name="game-controller" *ngIf="!hasWinner(game)"></ion-icon>
+        </ion-avatar>
+        <ion-label>
+          <h2>{{ game.template.name }}</h2>
+          <p>Winner: {{ getWinnerName(game) }}</p>
+          <p class="date">{{ game.date | date : 'MMM dd, yyyy' }}</p>
+        </ion-label>
+        <ion-badge slot="end" [class.has-winner]="hasWinner(game)">
+          {{ game.players.length }} Players
+        </ion-badge>
+      </ion-item>
+    </ion-item-sliding>
+
+    <div *ngIf="filteredGames.length === 0" class="empty-state">
+      <ion-icon name="documents-outline" class="empty-icon"></ion-icon>
+      <h3>No Games Found</h3>
+      <p>Try adjusting your filters or start a new game</p>
+    </div>
+  </ion-list>
 </ion-content>

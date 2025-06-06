@@ -27,4 +27,26 @@
       <span class="action-label">New Template</span>
     </div>
   </div>
+
+  <div class="most-played-section" *ngIf="mostPlayedTemplates.length > 0">
+    <div class="section-header">
+      <h2>Most Popular Games</h2>
+      <ion-button fill="clear" size="small" (click)="router.navigate(['/templates'])">
+        See all
+        <ion-icon name="chevron-forward-outline" slot="end"></ion-icon>
+      </ion-button>
+    </div>
+
+    <div class="templates-grid">
+      <div class="template-card" *ngFor="let item of mostPlayedTemplates" (click)="onNewGame()">
+        <div class="template-icon">
+          <ion-icon name="game-controller-outline"></ion-icon>
+        </div>
+        <div class="template-info">
+          <h3>{{ item.template.name }}</h3>
+          <p class="play-count">{{ item.playCount }} {{ item.playCount === 1 ? 'play' : 'plays' }}</p>
+        </div>
+      </div>
+    </div>
+  </div>
 </ion-content>

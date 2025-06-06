@@ -88,4 +88,25 @@ export class GamesStoreService {
     const updated = games.filter(g => g.id !== gameId);
     await this.storageService.set(GAMES_KEY, updated);
   }
+
+  async getMostPlayedTemplates(limit: number = 3): Promise<{ template: Template; playCount: number }[]> {
+    const games = await this.getGames();
+    const templateCounts = new Map<string, { template: Template; playCount: number }>();
+
+    games.forEach(game => {
+      const existing = templateCounts.get(game.templateId);
+      if (existing) {
+        existing.playCount++;
+      } else {
+        templateCounts.set(game.templateId, {
+          template: game.template,
+          playCount: 1
+        });
+      }
+    });
+
+    return Array.from(templateCounts.values())
+      .sort((a, b) => b.playCount - a.playCount)
+      .slice(0, limit);
+  }
 }
